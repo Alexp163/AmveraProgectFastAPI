@@ -1,0 +1,284 @@
+
+<html><head><base href="https://curlpy-transformer.app/"><title>CurlPy Transformer</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root {
+    --primary-blue: #4B8BBE;
+    --primary-yellow: #FFD43B;
+    --secondary-blue: #306998;
+    --secondary-yellow: #FFE873;
+    --background-color: #f5f5f5;
+    --text-color: #333;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  body {
+    font-family: 'Poppins', Arial, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--background-color);
+    background-image:
+      linear-gradient(45deg, #f0f0f0 25%, transparent 25%),
+      linear-gradient(-45deg, #f0f0f0 25%, transparent 25%),
+      linear-gradient(45deg, transparent 75%, #f0f0f0 75%),
+      linear-gradient(-45deg, transparent 75%, #f0f0f0 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+  }
+
+  h1 {
+    color: var(--secondary-blue);
+    text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px var(--shadow-color);
+  }
+
+  .container {
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 40px;
+    box-shadow: 0 10px 30px var(--shadow-color);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .container::before,
+  .container::after {
+    content: "";
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+  }
+
+  .container::before {
+    background-color: var(--primary-blue);
+    top: -150px;
+    left: -150px;
+    opacity: 0.05;
+  }
+
+  .container::after {
+    background-color: var(--primary-yellow);
+    bottom: -150px;
+    right: -150px;
+    opacity: 0.05;
+  }
+
+  .tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px var(--shadow-color);
+  }
+
+  .tab {
+    flex: 1;
+    text-align: center;
+    padding: 15px;
+    background-color: var(--secondary-blue);
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: 600;
+  }
+
+  .tab.active {
+    background-color: var(--primary-blue);
+    box-shadow: inset 0 -4px 0 var(--primary-yellow);
+  }
+
+  textarea, select {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 2px solid var(--primary-blue);
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    box-shadow: inset 0 2px 4px var(--shadow-color);
+    transition: all 0.3s;
+  }
+
+  textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--secondary-yellow);
+    box-shadow: 0 0 0 3px var(--secondary-yellow), inset 0 2px 4px var(--shadow-color);
+  }
+
+  button {
+    background-color: var(--primary-yellow);
+    color: var(--secondary-blue);
+    padding: 15px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 600;
+    transition: all 0.3s;
+    box-shadow: 0 4px 6px var(--shadow-color);
+  }
+
+  button:hover {
+    background-color: var(--secondary-yellow);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px var(--shadow-color);
+  }
+
+  #output {
+    background-color: #f8f8f8;
+    border: 2px solid var(--primary-blue);
+    border-radius: 8px;
+    padding: 20px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    margin-top: 20px;
+    font-family: 'Courier New', monospace;
+    box-shadow: inset 0 2px 4px var(--shadow-color);
+  }
+
+  .result-container {
+    position: relative;
+  }
+
+  .copy-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 2px solid var(--primary-blue);
+    border-radius: 50%;
+    padding: 8px;
+    transition: all 0.3s;
+    box-shadow: 0 2px 4px var(--shadow-color);
+  }
+
+  .copy-icon:hover {
+    background-color: var(--primary-yellow);
+    transform: scale(1.1);
+  }
+
+  .snake-icon {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px var(--shadow-color);
+  }
+
+  .snake-icon svg {
+    width: 40px;
+    height: 40px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <div class="snake-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path fill="#4B8BBE" d="M14.25.18l.9.2.73.26.59.3.45.32.34.34.25.34.16.33.1.3.04.26.02.2-.01.13V8.5l-.05.63-.13.55-.21.46-.26.38-.3.31-.33.25-.35.19-.35.14-.33.1-.3.07-.26.04-.21.02H8.77l-.69.05-.59.14-.5.22-.41.27-.33.32-.27.35-.2.36-.15.37-.1.35-.07.32-.04.27-.02.21v3.06H3.17l-.21-.03-.28-.07-.32-.12-.35-.18-.36-.26-.36-.36-.35-.46-.32-.59-.28-.73-.21-.88-.14-1.05-.05-1.23.06-1.22.16-1.04.24-.87.32-.71.36-.57.4-.44.42-.33.42-.24.4-.16.36-.1.32-.05.24-.01h.16l.06.01h8.16v-.83H6.18l-.01-2.75-.02-.37.05-.34.11-.31.17-.28.25-.26.31-.23.38-.2.44-.18.51-.15.58-.12.64-.1.71-.06.77-.04.84-.02 1.27.05zm-6.3 1.98l-.23.33-.08.41.08.41.23.34.33.22.41.09.41-.09.33-.22.23-.34.08-.41-.08-.41-.23-.33-.33-.22-.41-.09-.41.09zm13.09 3.95l.28.06.32.12.35.18.36.27.36.35.35.47.32.59.28.73.21.88.14 1.04.05 1.23-.06 1.23-.16 1.04-.24.86-.32.71-.36.57-.4.45-.42.33-.42.24-.4.16-.36.09-.32.05-.24.02-.16-.01h-8.22v.82h5.84l.01 2.76.02.36-.05.34-.11.31-.17.29-.25.25-.31.24-.38.2-.44.17-.51.15-.58.13-.64.09-.71.07-.77.04-.84.01-1.27-.04-1.07-.14-.9-.2-.73-.25-.59-.3-.45-.33-.34-.34-.25-.34-.16-.33-.1-.3-.04-.25-.02-.2.01-.13v-5.34l.05-.64.13-.54.21-.46.26-.38.3-.32.33-.24.35-.2.35-.14.33-.1.3-.06.26-.04.21-.02.13-.01h5.84l.69-.05.59-.14.5-.21.41-.28.33-.32.27-.35.2-.36.15-.36.1-.35.07-.32.04-.28.02-.21V6.07h2.09l.14.01zm-6.47 14.25l-.23.33-.08.41.08.41.23.33.33.23.41.08.41-.08.33-.23.23-.33.08-.41-.08-.41-.23-.33-.33-.23-.41-.08-.41.08z"/>
+      </svg>
+    </div>
+    <h1>CurlPy Transformer</h1>
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('curl')">CURL</div>
+      <div class="tab" onclick="switchTab('fetch')">Fetch</div>
+    </div>
+    <textarea id="input" rows="10" placeholder="Введите ваш запрос здесь..."></textarea>
+    <select id="format">
+      <option value="requests">Requests</option>
+      <option value="httpx">HTTPX</option>
+    </select>
+    <button onclick="transformRequest()">CONVERT TO PYTHON</button>
+    <div class="result-container">
+      <h3>Результат:</h3>
+      <pre id="output"></pre>
+      <svg class="copy-icon" onclick="copyToClipboard()" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M20 9H11C9.89543 9 9 9.89543 9 11V20C9 21.1046 9.89543 22 11 22H20C21.1046 22 22 21.1046 22 20V11C22 9.89543 21.1046 9 20 9Z" stroke="#4B8BBE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M5 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H13C13.5304 2 14.0391 2.21071 14.4142 2.58579C14.7893 2.96086 15 3.46957 15 4V5" stroke="#4B8BBE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <script>
+    let currentTab = 'curl';
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelector(`.tab:nth-child(${tab === 'curl' ? 1 : 2})`).classList.add('active');
+      document.getElementById('input').placeholder = `Введите ваш ${tab} запрос здесь...`;
+    }
+
+    async function transformRequest() {
+      const input = document.getElementById('input').value;
+      const format = document.getElementById('format').value;
+      const output = document.getElementById('output');
+
+      // Преобразование многострочного ввода в однострочный
+      const singleLineInput = input.replace(/\n/g, ' ').trim();
+
+      const requestData = {
+        request_type: currentTab,
+        target: format,
+        data_str: singleLineInput
+      };
+
+      try {
+        const response = await fetch('/api', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(requestData),
+        });
+
+        if (!response.ok) {
+          throw new Error('Ошибка при обработке запроса');
+        }
+
+        const data = await response.json();
+        output.textContent = data.request_string;
+        document.querySelector('.copy-icon').style.display = 'block';
+      } catch (error) {
+        output.textContent = 'Произошла ошибка: ' + error.message;
+        document.querySelector('.copy-icon').style.display = 'none';
+      }
+    }
+
+    function copyToClipboard() {
+      const output = document.getElementById('output');
+      const textarea = document.createElement('textarea');
+      textarea.value = output.textContent;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      const copyIcon = document.querySelector('.copy-icon');
+      copyIcon.innerHTML = '<path d="M20 6L9 17L4 12" stroke="#FFD43B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+      setTimeout(() => {
+        copyIcon.innerHTML = '<path d="M20 9H11C9.89543 9 9 9.89543 9 11V20C9 21.1046 9.89543 22 11 22H20C21.1046 22 22 21.1046 22 20V11C22 9.89543 21.1046 9 20 9Z" stroke="#4B8BBE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 15H4C3.46957 15 2.96086 14.7893 2.58579 14.4142C2.21071 14.0391 2 13.5304 2 13V4C2 3.46957 2.21071 2.96086 2.58579 2.58579C2.96086 2.21071 3.46957 2 4 2H13C13.5304 2 14.0391 2.21071 14.4142 2.58579C14.7893 2.96086 15 3.46957 15 4V5" stroke="#4B8BBE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>';
+      }, 2000);
+    }
+
+    // Инициализация
+    document.querySelector('.copy-icon').style.display = 'none';
+  </script>
+</body>
+</html>
